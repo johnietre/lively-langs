@@ -1,0 +1,100 @@
+<!-- For Spanish dictionary webpage -->
+<!-- Oldish html form -->
+<!DOCTYPE html>
+
+<html lang="en-US">
+
+<head>
+  <title>Span Dict</title>
+  <meta charset="UTF-8">
+  <link href="./static/style.css" type="text/css" rel="stylesheet">
+  <script src="./static/script.js" type="text/javascript" defer>
+
+  </script>
+</head>
+
+<body style="background-color: white">
+  <h1>Spanish/English Dictionary</h1>
+
+  <form id="form">
+    <label for="word">Word/Phrase: </label>
+    <input type="text" name="word" id="word">
+    <br><br>
+    <label for="all" id="alllab">All?</label>
+    <input type="checkbox" name="all" id="all" onclick="ischecked()">
+
+    <label for="def" id="deflab" hidden>Definition: </label>
+    <input type="text" name="def" id="def" hidden disabled>
+    <br class="radio-br" hidden><br class="radio-br" hidden>
+    <input type="radio" name="gender" id="gen-m" value="M" hidden disabled>
+    <label for="gen-m" id="gen-m-lab" hidden>Masculine</label><br class="radio-br" hidden>
+    <input type="radio" name="gender" id="gen-f" value="F" hidden disabled>
+    <label for="gen-f" id="gen-f-lab" hidden>Feminine</label><br class="radio-br" hidden>
+    <input type="radio" name="gender" id="gen-b" value="B" hidden disabled>
+    <label for="gen-b" id="gen-b-lab" hidden>Both</label><br class="radio-br" hidden>
+    <input type="radio" name="gender" id="gen-n" value="N/A" hidden>
+    <label for="gen-n" id="gen-n-lab" hidden>N/A</label><br class="radio-br" hidden>
+    <input type="radio" name="gender" id="gen-i" value="?" hidden>
+    <label for="gen-i" id="gen-i-lab" hidden>Don't Know</label><br class="radio-br" hidden>
+    <br><br>
+
+    <input type="submit" name="submit" value="Search" id="search">
+    <input type="submit" name="submit" value="Cancel" id="cancel" hidden>
+  </form>
+  <button onclick="addMode()" id="addmbut">Add Mode</button>
+  <label for="addinp" hidden id="addinplab">Password: </label>
+  <input type="text" id="addinp" name="addinp" hidden>
+  <p id="msg">
+    {{.Msg}}
+    {{if .NotFound}}
+      <button class="para-button" onclick="addWord()"><u>Add Word?</u></button>
+    {{else}}
+      <button class="para-button">Not what you were looking for?</button>
+    {{end}}
+  </p>
+
+  <!-- <div id="adddiv" hidden>
+    <form method="POST">
+      <label for="word">Word/Phrase: </label>
+      <input type="text" name="word" id="word">
+      <br><br>
+
+      <label for="" id="">Definition: </label>
+      <input type="text" name="" id="">
+      <br class="radio-br" hidden><br class="radio-br">
+      <input type="radio" name="gender" id="" value="M">
+      <label for="" id="">Masculine</label>
+      <input type="radio" name="gender" id="" value="F">
+      <label for="" id="">Feminine</label>
+      <input type="radio" name="gender" id="" value="B">
+      <label for="" id="">Both</label>
+      <input type="radio" name="gender" id="" value="N/A">
+      <label for="" id="">N/A</label>
+      <input type="radio" name="gender" id="" value="?">
+      <label for="" id="">Don't Know</label>
+      <br><br>
+
+      <input type="submit" name="submit" value="Search" id="search">
+      <input type="submit" name="submit" value="Cancel" id="cancel">
+    </form>
+  </div> -->
+
+  {{if .Entries}}
+    <table>
+      <tr>
+        <th>Word</th>
+        <th>Definition</th>
+        <th>Gender</th>
+      </tr>
+      {{range .Entries}}
+        <tr>
+          <td>{{.Word}}</td>
+          <td>{{.Def}}</td>
+          <td>{{.Gender}}</td>
+        </tr>
+      {{end}}
+    </table>
+  {{end}}
+</body>
+
+</html>

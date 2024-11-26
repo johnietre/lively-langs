@@ -1,0 +1,14 @@
+.para-button {
+  border: none;
+  background: none;
+  color: blue;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: "Times";
+  padding: 0;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
