@@ -7,11 +7,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://unpkg.com/vue@3"></script>
+  <link href="static/css/index.css" rel="stylesheet">
 </head>
 
 <body>
 
 <div id="app">
+
+<header>
+  <h1>Lively Langs</h1>
+</header>
+
+<nav>
+  <div class="search-bar lang-selection">
+    <label>Language: </label>
+    <select @input="changeCurrLang()" v-model="currLangIndex">
+      <option  value="-1">--PLEASE SELECT--</option>
+      <option v-for="(lang, i) in langs" :key="lang.id" value="i">{{lang.name}}</option>
+    </select>
+  </div>
+</nav>
+
+<main v-if="currLang.name!==''">
+  <h3 class="lang-name">{{currLang.name}}</h3>
+  <div class="get-word-div">
+    <div class="search word-search">
+      <input placeholder="Search Word" v-model="wordInput">
+    </div>
+    <div>
+      <button @click="await getAllWords()">Load All Words</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+</footer>
 
 </div>
 

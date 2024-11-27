@@ -21,41 +21,41 @@ import (
 )
 
 var (
-  ip string = "127.0.0.1"
+	ip   string = "127.0.0.1"
 	port uint16
 
-	db   *sql.DB
+	db *sql.DB
 
-  tmplsPath string
-	tmpl *template.Template
+	tmplsPath string
+	tmpl      *template.Template
 )
 
 func main() {
-  cmd := cobra.Command{
-    Use: "lively-langs",
-    Run: run,
-    DisableFlagsInUseLine: true,
-  }
+	cmd := cobra.Command{
+		Use:                   "lively-langs",
+		Run:                   run,
+		DisableFlagsInUseLine: true,
+	}
 
-  flags := cmd.Flags()
-  flags.String("db", "lively-langs.db", "Path to database")
-  flags.String("static", "./static", "Path to static dir")
-  flags.StringVar(&tmplsPath, "templates", "./templates", "Path to templates dir")
-  flags.IP("ip", net.IPv4(127, 0, 0, 1), "IP address to run on")
-  flags.Uint16("port", 8000, "Port to run on")
+	flags := cmd.Flags()
+	flags.String("db", "lively-langs.db", "Path to database")
+	flags.String("static", "./static", "Path to static dir")
+	flags.StringVar(&tmplsPath, "templates", "./templates", "Path to templates dir")
+	flags.IP("ip", net.IPv4(127, 0, 0, 1), "IP address to run on")
+	flags.Uint16("port", 8000, "Port to run on")
 
-  if err := cmd.Execute(); err != nil {
-    log.Fatal(err)
-  }
+	if err := cmd.Execute(); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func run(cmd *cobra.Command, _ []string) {
-  flags := cmd.Flags()
+	flags := cmd.Flags()
 
-  ip, _ := flags.GetIP("ip")
-  port, _ := flags.GetUint16("port")
-  dbPath, _ := flags.GetString("db")
-  staticPath, _ := flags.GetString("static")
+	ip, _ := flags.GetIP("ip")
+	port, _ := flags.GetUint16("port")
+	dbPath, _ := flags.GetString("db")
+	staticPath, _ := flags.GetString("static")
 
 	var err error
 	db, err = sql.Open("sqlite3", dbPath)
@@ -63,38 +63,38 @@ func run(cmd *cobra.Command, _ []string) {
 		log.Fatal(err)
 	}
 	defer db.Close()
-  if _, err := db.Exec(createTablesStmt); err != nil {
-    log.Fatal("error initializing DB: ", err)
-  }
+	if _, err := db.Exec(createTablesStmt); err != nil {
+		log.Fatal("error initializing DB: ", err)
+	}
 
-  if err := parse(); err != nil {
-    log.Fatal("error parsing templates: ", err)
-  }
+	if err := parse(); err != nil {
+		log.Fatal("error parsing templates: ", err)
+	}
 
-  r := http.NewServeMux()
+	r := http.NewServeMux()
 	fs := http.FileServer(http.Dir(staticPath))
 	r.Handle("/static/", http.StripPrefix("/static", fs))
 	r.HandleFunc("/", pageHandler)
 	r.HandleFunc("/api", apiHandler)
 
-  srvr := &http.Server{
-    Handler: r,
-  }
+	srvr := &http.Server{
+		Handler: r,
+	}
 
-  addr := &net.TCPAddr{IP: ip, Port: int(port)}
-  ln, err := net.ListenTCP("tcp", addr)
-  if err != nil {
-    log.Fatalf("error starting listener on %s: %v", addr, err)
-  }
+	addr := &net.TCPAddr{IP: ip, Port: int(port)}
+	ln, err := net.ListenTCP("tcp", addr)
+	if err != nil {
+		log.Fatalf("error starting listener on %s: %v", addr, err)
+	}
 
-  log.Printf("listening on %s", addr)
+	log.Printf("listening on %s", addr)
 	log.Fatal(srvr.Serve(ln))
 }
 
 func parse() (err error) {
-  path := filepath.Join(tmplsPath, "index.html")
+	path := filepath.Join(tmplsPath, "index.html")
 	tmpl, err = template.ParseFiles(path)
-  return
+	return
 }
 
 func pageHandler(w http.ResponseWriter, r *http.Request) {
@@ -128,7 +128,7 @@ func apiHandler(w http.ResponseWriter, r *http.Request) {
 		oldDef := strings.Join(r.Form["old"], " ")
 		newDef := strings.Join(r.Form["new"], " ")
 		if method == "suggestion" {
-      /* TODO: Handle suggestions */
+			/* TODO: Handle suggestions */
 		} else if method == "admin" {
 			// Search for admin in database
 			email, password := r.FormValue("email"), r.FormValue("password")

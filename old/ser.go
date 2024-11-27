@@ -37,7 +37,7 @@ type PageData struct {
 }
 
 var (
-	IP string = "localhost"
+	IP      string = "localhost"
 	WebPort string = ":8000"
 	APIPort string = ":9000"
 	lock    sync.Mutex
